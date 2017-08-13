@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
     <TextView
         android:id="@+id/demoTitle"
         android:layout_width="match_parent"
@@ -19,23 +20,23 @@
         android:background="#eeeeee" />
 
     <CheckBox
+        android:id="@+id/checkBoxDTR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textBtnDTR"
-        android:id="@+id/checkBoxDTR" />
+        android:text="@string/textBtnDTR" />
 
 
     <CheckBox
+        android:id="@+id/checkBoxRTS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textBtnRTS"
-        android:id="@+id/checkBoxRTS" />
+        android:text="@string/textBtnRTS" />
 
     <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
-        android:layout_below="@+id/demoTitle"
         android:layout_height="1dip"
+        android:layout_below="@+id/demoTitle"
         android:background="#eeeeee" />
 
     <ScrollView
@@ -46,9 +47,31 @@
 
         <TextView
             android:id="@+id/consoleText"
-            android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textIsSelectable="true"
             android:typeface="monospace" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.42"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.50"
+        android:text="TextView" />
+
 </LinearLayout>

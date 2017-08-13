@@ -19,19 +19,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/demoTitle"
         android:layout_centerHorizontal="true"
-        android:text="@string/refreshing"
         android:padding="8dp"
+        android:text="@string/refreshing"
         android:textSize="18sp" />
     
     <ProgressBar
         android:id="@+id/progressBar"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/progressBarTitle"
         android:layout_centerHorizontal="true"
-        android:padding="8dp"
-        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:padding="8dp" />
     
     <View
         android:id="@+id/separator"

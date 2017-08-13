@@ -28,8 +28,11 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -49,8 +52,6 @@ import java.util.concurrent.Executors;
  */
 public class SerialConsoleActivity extends Activity {
 
-    private final String TAG = SerialConsoleActivity.class.getSimpleName();
-
     /**
      * Driver instance, passed in statically via
      * {@link #show(Context, UsbSerialPort)}.
@@ -62,17 +63,11 @@ public class SerialConsoleActivity extends Activity {
      * process, and this is a simple demo.
      */
     private static UsbSerialPort sPort = null;
-
+    private final String TAG = SerialConsoleActivity.class.getSimpleName();
+    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private TextView mTitleTextView;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
-    private CheckBox chkDTR;
-    private CheckBox chkRTS;
-
-    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-
-    private SerialInputOutputManager mSerialIoManager;
-
     private final SerialInputOutputManager.Listener mListener =
             new SerialInputOutputManager.Listener() {
 
@@ -91,6 +86,25 @@ public class SerialConsoleActivity extends Activity {
             });
         }
     };
+    private CheckBox chkDTR;
+    private CheckBox chkRTS;
+    private Button button0;
+    private EditText editText0;
+    private TextView textView0;
+    private SerialInputOutputManager mSerialIoManager;
+
+    /**
+     * Starts the activity, using the supplied driver instance.
+     *
+     * @param context
+     * @param port
+     */
+    static void show(Context context, UsbSerialPort port) {
+        sPort = port;
+        final Intent intent = new Intent(context, SerialConsoleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +115,10 @@ public class SerialConsoleActivity extends Activity {
         mScrollView = (ScrollView) findViewById(R.id.demoScroller);
         chkDTR = (CheckBox) findViewById(R.id.checkBoxDTR);
         chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
+
+        button0 = (Button) findViewById(R.id.button);
+        textView0 = (TextView) findViewById(R.id.textView);
+        editText0 = (EditText) findViewById(R.id.editText);
 
         chkDTR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -120,8 +138,25 @@ public class SerialConsoleActivity extends Activity {
             }
         });
 
-    }
+        button0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    byte[] rx = new byte[100];
+                    byte[] tx = editText0.getText().toString().getBytes();
 
+                    sPort.write(tx, 100);
+
+                    sPort.read(rx, 1000);
+
+                    textView0.append(rx.toString());
+
+                } catch (IOException x) {
+                }
+            }
+        });
+
+    }
 
     @Override
     protected void onPause() {
@@ -212,19 +247,6 @@ public class SerialConsoleActivity extends Activity {
                 + HexDump.dumpHexString(data) + "\n\n";
         mDumpTextView.append(message);
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
-    }
-
-    /**
-     * Starts the activity, using the supplied driver instance.
-     *
-     * @param context
-     * @param driver
-     */
-    static void show(Context context, UsbSerialPort port) {
-        sPort = port;
-        final Intent intent = new Intent(context, SerialConsoleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        context.startActivity(intent);
     }
 
 }
